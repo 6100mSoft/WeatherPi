@@ -3,8 +3,8 @@
 import socket
 import threading
 import sys
-
-
+import liquidcrystal_i2c
+lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
 def usage():
     print("IRC simple Python client | by bl4de | github.com/bl4de | twitter.com/_bl4de | hackerone.com/bl4de\n")
     print("$ ./irc_client.py USERNAME CHANNEL\n")
@@ -21,7 +21,7 @@ def print_response():
     resp = client.get_response()
     if resp:
         msg = resp.strip().split(":")
-        print("< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
+        lcd.printline(3,"< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
 
 
 class IRCSimpleClient:
