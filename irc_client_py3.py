@@ -33,14 +33,8 @@ def print_response():
             for x in range(0, 3):
                 lcd.printline(x, "")
         #print("< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
-        if data == 0:
+        if data <= 2:
             data = data + 1
-        elif data == 1:
-            data = data + 1
-        elif data == 2:
-            data = data + 1
-        elif data == 3:
-            data = data - 3
             for x in range(0, 3):
                 lcd.printline(x, "")
         else:
@@ -95,16 +89,14 @@ if __name__ == "__main__":
     int_data = 0
     while(joined == False):
         resp = client.get_response()
-        if int_data == 0:
-            int_data = int_data + 1
-        elif int_data == 1:
-            int_data = int_data + 1
-        elif int_data == 2:
-            int_data = int_data + 1
-        elif int_data == 3:
-            int_data = int_data - 3
-            for z in range(0, 3):
-                lcd.printline(z, "")
+        if data <= 2:
+            data = data + 1
+            for x in range(0, 3):
+                lcd.printline(x, "")
+        else:
+            data = data - 3
+            for y in range(0, 3):
+                lcd.printline(y, "")
         else:
             int_data = int_data - 3
             for i in range(0, 3):
