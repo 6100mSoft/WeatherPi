@@ -97,10 +97,6 @@ if __name__ == "__main__":
             data = data - 3
             for y in range(0, 3):
                 lcd.printline(y, "")
-        else:
-            int_data = int_data - 3
-            for i in range(0, 3):
-                lcd.printline(i, "")
         #print(resp.strip())
         lcd.printline(int_data, resp.strip())
         if "No Ident response" in resp:
