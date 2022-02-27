@@ -4,9 +4,14 @@ import socket
 import threading
 import sys
 import liquidcrystal_i2c
-lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
+#import time
 def usage():
+    #lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     print("IRC simple Python client | by bl4de | github.com/bl4de | twitter.com/_bl4de | hackerone.com/bl4de\n")
+    #print("init task 0 - debug msg")
+    #while 0 == 0:
+        #lcd.printline(0, "test")
+        #time.sleep(100)
     print("$ ./irc_client.py USERNAME CHANNEL\n")
     print("where: USERNAME - your username, CHANNEL - channel you'd like to join (eg. channelname or #channelname)")
 
@@ -18,10 +23,30 @@ def channel(channel):
 
 # helper function used as thread target
 def print_response():
+    lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     resp = client.get_response()
     if resp:
         msg = resp.strip().split(":")
-        lcd.printline(3,"< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
+        if data <= 3:
+            lcd.printline(data,"< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
+        else:
+            for x in range(0, 3):
+                lcd.printline(x, "")
+        #print("< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
+        if data == 0:
+            data = data + 1
+        elif data == 1:
+            data = data + 1
+        elif data == 2:
+            data = data + 1
+        elif data == 3:
+            data = data - 3
+            for x in range(0, 3):
+                lcd.printline(x, "")
+        else:
+            data = data - 3
+            for y in range(0, 3):
+                lcd.printline(y, "")
 
 
 class IRCSimpleClient:
@@ -61,15 +86,31 @@ if __name__ == "__main__":
     else:
         username = sys.argv[1]
         channel = channel(sys.argv[2])
-
+    data = 0
+    lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     cmd = ""
     joined = False
     client = IRCSimpleClient(username, channel)
     client.connect()
-
+    int_data = 0
     while(joined == False):
         resp = client.get_response()
-        print(resp.strip())
+        if int_data == 0:
+            int_data = int_data + 1
+        elif int_data == 1:
+            int_data = int_data + 1
+        elif int_data == 2:
+            int_data = int_data + 1
+        elif int_data == 3:
+            int_data = int_data - 3
+            for z in range(0, 3):
+                lcd.printline(z, "")
+        else:
+            int_data = int_data - 3
+            for i in range(0, 3):
+                lcd.printline(i, "")
+        #print(resp.strip())
+        lcd.printline(int_data, resp.strip())
         if "No Ident response" in resp:
             client.send_cmd("NICK", username)
             client.send_cmd(
@@ -82,9 +123,9 @@ if __name__ == "__main__":
         # username already in use? try to use username with _
         if "433" in resp:
             username = "_" + username
-            client.send_cmd("NICK", username)
             client.send_cmd(
                 "USER", "{} * * :{}".format(username, username))
+            client.send_cmd("NICK", username)
 
         # if PING send PONG with name of the server
         if "PING" in resp:
