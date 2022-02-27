@@ -12,7 +12,6 @@ def channel(channel):
     if channel.startswith("#") == False:
         return "#" + channel
     return channel
-# helper function used as thread target
 def print_response():
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     resp = client.get_response()
@@ -47,12 +46,10 @@ class IRCSimpleClient:
         self.conn.send(command)
     def send_message_to_channel(self, message):
         command = "PRIVMSG {}".format(self.channel)
-        message = ":" + message
-        self.send_cmd(command, message)
+        self.send_cmd(command, ":" + message)
     def join_channel(self):
-        cmd = "JOIN"
         channel = self.channel
-        self.send_cmd(cmd, channel)
+        self.send_cmd("JOIN", channel)
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         usage()
@@ -82,19 +79,15 @@ if __name__ == "__main__":
             client.send_cmd("NICK", username)
             client.send_cmd(
                 "USER", "{} * * :{}".format(username, username))
-        # we're accepted, now let's join the channel!
         if "376" in resp:
             client.join_channel()
-        # username already in use? try to use username with _
         if "433" in resp:
             username = "_" + username
             client.send_cmd(
                 "USER", "{} * * :{}".format(username, username))
             client.send_cmd("NICK", username)
-        # if PING send PONG with name of the server
         if "PING" in resp:
             client.send_cmd("PONG", ":" + resp.split(":")[1])
-        # we've joined
         if "366" in resp:
             joined = True
     while(cmd != "/quit"):
@@ -102,8 +95,6 @@ if __name__ == "__main__":
         if cmd == "/quit":
             client.send_cmd("QUIT", "Good bye!")
         client.send_message_to_channel(cmd)
-        # socket conn.receive blocks the program until a response is received
-        # to prevent blocking program execution, receive should be threaded
         response_thread = threading.Thread(target=print_response)
         response_thread.daemon = True
         response_thread.start()
