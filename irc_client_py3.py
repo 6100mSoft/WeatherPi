@@ -1,7 +1,7 @@
 import liquidcrystal_i2c
 import socket as sock
 from sys import argv
-from threading import thread
+from threading import Thread
 def chn(chn):
     if chn.startswith("#")==False:
         return "#"+chn
@@ -32,8 +32,8 @@ class Client:
         self.send_cmd(cmd,":"+msg)
     def join(self):
         self.send_cmd("JOIN",self.chn)
-if __name__ == "__main__":
-    if len(argv) != 3:
+if __name__=="__main__":
+    if len(argv)!=3:
         print("IRC simple Python client | by bl4de \n")
         print("$ ./irc_client_py3.py user channel")
         exit(0)
