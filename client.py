@@ -21,7 +21,7 @@ class Client:
         self.ch=ch
     def con(self):
         self.con=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        self.con.connect(self.srv,self.port)
+        self.con.connect(self.srv,self.dev)
     def get(self):
         return self.con.recv(512).decode("utf-8")
     def send(self,cmd,msg):
