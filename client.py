@@ -48,8 +48,8 @@ if __name__=="__main__":
         flg=False
         ins=Client(usr,ch)
         ins.con()
-        lcd.printline(2,"Bootup Status:")
-        lcd.printline(3,"Bootup Complete!")
+        #lcd.printline(2,"Bootup Status:")
+        #lcd.printline(3,"Bootup Complete!")
         # Proper registration implementation by my friend epicness @ github.com/3picness
         # Thanks! :3
         authNotSent = True
@@ -68,10 +68,8 @@ if __name__=="__main__":
             if "376" in res:
                 ins.join()
             if "433" in res:
-                usr="_"+usr
-                lcd.printline("USER","{} * * :{}".format(str(usr),str(usr)))
-                ins.send("USER","{} * * :{}".format(usr,usr))
-                ins.send("NICK",usr)
+                ins.send("USER","{} * * :{}".format("_"+usr,"_"+usr))
+                ins.send("NICK","_"+usr)
             if "PING" in res:
                 ins.send("PONG", ":"+res.split(":")[1])
             if "366" in res:
