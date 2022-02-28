@@ -5,10 +5,6 @@ import socket
 def clr():
     for x in range(0,3):
         lcd.printline(x,"")
-def chn(ch):
-    if ch.startswith("#")==False:
-        return "#"+ch
-    return ch
 def log():
     lcd=liquidcrystal_i2c.LiquidCrystal_I2C(0x27,1,numlines=4)
     if ins.get_resp():
@@ -25,31 +21,35 @@ class Client:
         self.ch=ch
     def con(self):
         self.con=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        self.con.connect((self.srv,self.port))
+        self.con.connect(self.srv,self.port)
     def get(self):
         return self.con.recv(512).decode("utf-8")
     def send(self,cmd,msg):
         self.conn.send("{} {}\r\n".format(cmd,msg).encode("utf-8"))
-    def add2ch(self,msg):
+    def msgr(self,msg):
         cmd="PRIVMSG {}".format(self.chn)
         self.send_cmd(cmd,":"+msg)
     def join(self):
         self.send_cmd("JOIN",self.chn)
 if __name__=="__main__":
+    lcd=liquidcrystal_i2c.LiquidCrystal_I2C(0x27,1,numlines=4)
+    n=3
+    i=0
     if len(argv)!=3:
-        print("IRC simple Python client | by bl4de")
-        print("$ ./irc_client_py3.py user channel")
+        lcd.printline(0, "IRC client originally by bl4de")
+        lcd.printline(1, "$ ./irc_client_py3.py user channel")
+        lcd.printline(2, "Initilization Status:")
+        lcd.printline(3, "Init Complete!")
         exit(0)
     usr=argv[1]
-    ch=chn(argv[2])
-    i=0
-    lcd=liquidcrystal_i2c.LiquidCrystal_I2C(0x27,1,numlines=4)
+    ch=f"#{argv[2]}"
     cmd=""
-    flag=False
+    flg=False
     ins=Client(usr,ch)
     ins.con()
-    n=0
-    while(flag==False):
+    lcd.printline(2, "Bootup Status:")
+    lcd.printline(3, "Bootup Complete!")
+    while(flg==False):
         res=ins.get()
         if n<=2:
             n=n+1
@@ -74,7 +74,7 @@ if __name__=="__main__":
     while(cmd != "/quit"):
         if input("< {}> ".format(usr)).strip()=="/quit":
             ins.send("QUIT", "Good bye!")
-        ins.add2ch(cmd)
-        run=Thread(target=log_resp)
+        ins.msgr(cmd)
+        run=Thread(target=log)
         run.daemon=True
         run.start()
