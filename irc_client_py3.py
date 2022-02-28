@@ -38,7 +38,7 @@ if __name__=="__main__":
         print("$ ./irc_client_py3.py user channel")
         exit(0)
     usr=argv[1]
-    ch=ch(argv[2])
+    ch=chn(argv[2])
     i=0
     lcd=liquidcrystal_i2c.LiquidCrystal_I2C(0x27,1,numlines=4)
     cmd=""
@@ -47,26 +47,26 @@ if __name__=="__main__":
     ins.con()
     n=0
     while(joined==False):
-        resp=ins.get_resp()
+        res=ins.get_resp()
         if n<=2:
             n=n+1
             clean()
         else:
             n=n-3
             clean()
-        lcd.printline(n,resp.strip())
-        if "No Ident resp" in resp:
+        lcd.printline(n,res.strip())
+        if "No Ident response" in res:
             ins.send("USER","{} * * :{}".format(usr,usr))
             ins.send("NICK",usr)
-        if "376" in resp:
+        if "376" in res:
             ins.join()
-        if "433" in resp:
+        if "433" in res:
             usr="_"+usr
             ins.send("USER","{} * * :{}".format(usr,usr))
             ins.send("NICK",usr)
-        if "PING" in resp:
-            ins.send("PONG", ":"+resp.split(":")[1])
-        if "366" in resp:
+        if "PING" in res:
+            ins.send("PONG", ":"+res.split(":")[1])
+        if "366" in res:
             joined=True
     while(cmd != "/quit"):
         if input("< {}> ".format(usr)).strip() == "/quit":
