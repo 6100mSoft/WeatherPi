@@ -1,6 +1,6 @@
 import liquidcrystal_i2c
 import socket
-import threading
+from threading import thread
 from sys import argv
 def usage():
     print("IRC simple Python client | by bl4de | github.com/bl4de | twitter.com/_bl4de | hackerone.com/bl4de\n")
@@ -82,7 +82,7 @@ if __name__ == "__main__":
         if cmd == "/quit":
             ins.send_cmd("QUIT", "Good bye!")
         ins.sendmsg2chn(cmd)
-        run = threading.Thread(target=print_resp)
+        run = Thread(target=print_resp)
         run.daemon = True
         run.start()
 def clean():
