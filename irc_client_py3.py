@@ -77,4 +77,4 @@ if __name__ == "__main__":
         run.start()
 def clean():
     for x in range(0,3):
-        lcd.printline(x, "")
+        lcd.printline(x,"")
