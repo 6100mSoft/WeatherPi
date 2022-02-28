@@ -2,11 +2,14 @@ from sys import argv
 from threading import Thread
 import liquidcrystal_i2c
 import socket
+def clr():
+    for x in range(0,3):
+        lcd.printline(x,"")
 def chn(ch):
     if ch.startswith("#")==False:
         return "#"+ch
     return ch
-def log_resp():
+def log():
     lcd=liquidcrystal_i2c.LiquidCrystal_I2C(0x27,1,numlines=4)
     if ins.get_resp():
         msg=ins.get_resp().strip().split(":")
@@ -69,12 +72,9 @@ if __name__=="__main__":
         if "366" in res:
             joined=True
     while(cmd != "/quit"):
-        if input("< {}> ".format(usr)).strip() == "/quit":
-            ins.send_cmd("QUIT", "Good bye!")
+        if input("< {}> ".format(usr)).strip()=="/quit":
+            ins.send("QUIT", "Good bye!")
         ins.add2ch(cmd)
         run=Thread(target=log_resp)
         run.daemon=True
         run.start()
-def clr():
-    for x in range(0,3):
-        lcd.printline(x,"")
