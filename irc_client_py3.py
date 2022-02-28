@@ -21,7 +21,7 @@ class Client:
         self.port=port
         self.chn=chn
     def con(self):
-        self.con=socket.socket(socket.AF_INET,socket.socket_STREAM)
+        self.con=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         self.con.con((self.server,self.port))
     def get_resp(self):
         return self.con.recv(512).decode("utf-8")
