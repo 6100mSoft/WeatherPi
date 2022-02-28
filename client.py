@@ -25,7 +25,7 @@ class Client:
     def get(self):
         return self.con.recv(512).decode("utf-8")
     def send(self,cmd,msg):
-        self.conn.send("{} {}\r\n".format(cmd,msg).encode("utf-8"))
+        self.con.send("{} {}\r\n".format(cmd,msg).encode("utf-8"))
     def msgr(self,msg):
         cmd="PRIVMSG {}".format(self.chn)
         self.send_cmd(cmd,":"+msg)
