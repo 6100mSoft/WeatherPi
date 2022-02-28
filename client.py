@@ -28,9 +28,9 @@ class Client:
         self.con.send("{} {}\r\n".format(cmd,msg).encode("utf-8"))
     def msgr(self,msg):
         cmd="PRIVMSG {}".format(self.chn)
-        self.send_cmd(cmd,":"+msg)
+        self.send(cmd,":"+msg)
     def join(self):
-        self.send_cmd("JOIN",self.chn)
+        self.send("JOIN",self.chn)
 if __name__=="__main__":
     lcd=liquidcrystal_i2c.LiquidCrystal_I2C(0x27,1,numlines=4)
     n=3
