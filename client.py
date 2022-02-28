@@ -61,6 +61,7 @@ if __name__=="__main__":
             n=n-3
             clr()
         if "No Ident response" in res or authNotSent:
+            lcd.printline("USER","{} * * :{}".format(usr,usr))
             ins.send("USER","{} * * :{}".format(usr,usr))
             ins.send("NICK",usr)
             authNotSent = False
@@ -68,6 +69,7 @@ if __name__=="__main__":
             ins.join()
         if "433" in res:
             usr="_"+usr
+            lcd.printline("USER","{} * * :{}".format(usr,usr))
             ins.send("USER","{} * * :{}".format(usr,usr))
             ins.send("NICK",usr)
         if "PING" in res:
@@ -80,4 +82,5 @@ if __name__=="__main__":
         ins.msgr(cmd)
         run=Thread(target=log)
         run.daemon=True
+        clr()
         run.start()
