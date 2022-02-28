@@ -25,7 +25,6 @@ class Client:
     def get(self):
         return self.con.recv(512).decode("utf-8")
     def send(self,cmd,msg,n):
-        lcd.printline(n,"{} {}\r\n".format(cmd,msg).encode("utf-8"))
         self.con.send("{} {}\r\n".format(cmd,msg).encode("utf-8"))
     def msgr(self,msg):
         cmd="PRIVMSG {}".format(self.ch)
@@ -49,8 +48,8 @@ if __name__=="__main__":
         flg=False
         ins=Client(usr,ch)
         ins.con()
-        #lcd.printline(2,"Bootup Status:")
-        #lcd.printline(3,"Bootup Complete!")
+        lcd.printline(2,"Bootup Status:")
+        lcd.printline(3,"Bootup Complete!")
         # Proper registration implementation by my friend epicness @ github.com/3picness
         # Thanks! :3
         authNotSent = True
