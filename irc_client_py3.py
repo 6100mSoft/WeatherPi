@@ -19,14 +19,14 @@ class Client:
         self.usr=usr
         self.srv=srv
         self.port=port
-        self.chn=ch
+        self.ch=ch
     def con(self):
         self.con=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        self.con.conn((self.server,self.port))
+        self.con.connect((self.server,self.port))
     def get(self):
         return self.con.recv(512).decode("utf-8")
     def send(self,cmd,msg):
-        self.connect.send("{} {}\r\n".format(cmd,msg).encode("utf-8"))
+        self.conn.send("{} {}\r\n".format(cmd,msg).encode("utf-8"))
     def add2ch(self,msg):
         cmd="PRIVMSG {}".format(self.chn)
         self.send_cmd(cmd,":"+msg)
