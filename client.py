@@ -80,7 +80,7 @@ if __name__=="__main__":
             cmd = input("< {}> ".format(username)).strip()
             if cmd =="/quit":
                 ins.send("QUIT", "Good bye!")
-            ins.msgr(cmd)
+            ins.send(cmd)
             run=Thread(target=log)
             run.daemon=True
             clr()
