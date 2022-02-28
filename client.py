@@ -62,7 +62,6 @@ if __name__=="__main__":
                 n=n-3
                 clr()
             if "No Ident response" in res or authNotSent:
-                lcd.printline("USER","{} * * :{}".format(str(usr),str(usr)))
                 ins.send("USER","{} * * :{}".format(usr,usr))
                 ins.send("NICK",usr)
                 authNotSent = False
