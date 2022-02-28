@@ -49,6 +49,11 @@ if __name__=="__main__":
     ins.con()
     lcd.printline(2,"Bootup Status:")
     lcd.printline(3,"Bootup Complete!")
+    # Proper registration implementation by my friend epicness @
+    # github.com/3picness
+    # Thanks man! :D
+    
+    authNotSent = True
     while(flg==False):
         res=ins.get()
         if n<=2:
@@ -57,10 +62,10 @@ if __name__=="__main__":
         else:
             n=n-3
             clr()
-        lcd.printline(n,res.strip())
-        if "No Ident response" in res:
+        if "No Ident response" in res or authNotSent:
             ins.send("USER","{} * * :{}".format(usr,usr))
             ins.send("NICK",usr)
+            authNotSent = False
         if "376" in res:
             ins.join()
         if "433" in res:
