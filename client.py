@@ -25,7 +25,7 @@ class Client:
     def get(self):
         return self.con.recv(512).decode("utf-8")
     def send(self,cmd,msg):
-        self.conn.send("{} {}\r\n".format(cmd,msg).encode("utf-8"))
+        self.connect.send("{} {}\r\n".format(cmd,msg).encode("utf-8"))
     def msgr(self,msg):
         cmd="PRIVMSG {}".format(self.chn)
         self.send_cmd(cmd,":"+msg)
@@ -49,10 +49,8 @@ if __name__=="__main__":
     ins.con()
     lcd.printline(2,"Bootup Status:")
     lcd.printline(3,"Bootup Complete!")
-    # Proper registration implementation by my friend epicness @
-    # github.com/3picness
-    # Thanks man! :D
-    
+    # Proper registration implementation by my friend epicness @ github.com/3picness
+    # Thanks! :3
     authNotSent = True
     while(flg==False):
         res=ins.get()
