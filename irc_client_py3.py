@@ -37,7 +37,7 @@ class Client:
         self.send_cmd("JOIN",self.chn)
 if __name__=="__main__":
     if len(argv)!=3:
-        print("IRC simple Python client | by bl4de \n")
+        print("IRC simple Python client | by bl4de")
         print("$ ./irc_client_py3.py user channel")
         exit(0)
     usr=argv[1]
