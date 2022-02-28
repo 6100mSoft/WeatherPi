@@ -75,7 +75,9 @@ if __name__=="__main__":
                 ins.send("PONG", ":"+res.split(":")[1])
             if "366" in res:
                 flag=True
+                
         while(cmd != "/quit"):
+            cmd = input("< {}> ".format(username)).strip()
             if input("< {}> ".format(usr)).strip()=="/quit":
                 ins.send("QUIT", "Good bye!")
             ins.msgr(cmd)
