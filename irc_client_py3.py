@@ -5,16 +5,16 @@ import threading
 import sys
 import liquidcrystal_i2c
 def usage():
-    print("IRC simple Python client | by bl4de | github.com/bl4de | twitter.com/_bl4de | hackerone.com/bl4de\n")
-    print("$ ./irc_client.py USERNAME CHANNEL\n")
-    print("where: USERNAME - your username, CHANNEL - channel you'd like to join (eg. channelname or #channelname)")
-def channel(channel):
-    if channel.startswith("#") == False:
-        return "#" + channel
-    return channel
-def print_response():
+    print("IRC simple Python ins | by bl4de | github.com/bl4de | twitter.com/_bl4de | hackerone.com/bl4de\n")
+    print("$ ./irc_ins.py user chn\n")
+    print("where: user - your user, chn - chn you'd like to join (eg. chnname or #chnname)")
+def chn(chn):
+    if chn.startswith("#") == False:
+        return "#" + chn
+    return chn
+def print_resp():
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
-    resp = client.get_response()
+    resp = ins.get_resp()
     if resp:
         msg = resp.strip().split(":")
         if data <= 3:
@@ -30,42 +30,42 @@ def print_response():
             data = data - 3
             for y in range(0, 3):
                 lcd.printline(y, "")
-class IRCSimpleClient:
-    def __init__(self, username, channel, server="irc.freenode.net", port=6667):
-        self.username = username
+class IRCSimpleins:
+    def __init__(self, user, chn, server="irc.freenode.net", port=6667):
+        self.user = user
         self.server = server
         self.port = port
-        self.channel = channel
+        self.chn = chn
     def connect(self):
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn.connect((self.server, self.port))
-    def get_response(self):
+    def get_resp(self):
         return self.conn.recv(512).decode("utf-8")
     def send_cmd(self, cmd, message):
         command = "{} {}\r\n".format(cmd, message).encode("utf-8")
         self.conn.send(command)
-    def send_message_to_channel(self, message):
-        command = "PRIVMSG {}".format(self.channel)
+    def send_message_to_chn(self, message):
+        command = "PRIVMSG {}".format(self.chn)
         self.send_cmd(command, ":" + message)
-    def join_channel(self):
-        channel = self.channel
-        self.send_cmd("JOIN", channel)
+    def join_chn(self):
+        chn = self.chn
+        self.send_cmd("JOIN", chn)
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         usage()
         exit(0)
     else:
-        username = sys.argv[1]
-        channel = channel(sys.argv[2])
+        user = sys.argv[1]
+        chn = chn(sys.argv[2])
     data = 0
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     cmd = ""
     joined = False
-    client = IRCSimpleClient(username, channel)
-    client.connect()
+    ins = IRCSimpleins(user, chn)
+    ins.connect()
     int_data = 0
     while(joined == False):
-        resp = client.get_response()
+        resp = ins.get_resp()
         if data <= 2:
             data = data + 1
             for x in range(0, 3):
@@ -75,26 +75,26 @@ if __name__ == "__main__":
             for y in range(0, 3):
                 lcd.printline(y, "")
         lcd.printline(int_data, resp.strip())
-        if "No Ident response" in resp:
-            client.send_cmd("NICK", username)
-            client.send_cmd(
-                "USER", "{} * * :{}".format(username, username))
+        if "No Ident resp" in resp:
+            ins.send_cmd("NICK", user)
+            ins.send_cmd(
+                "USER", "{} * * :{}".format(user, user))
         if "376" in resp:
-            client.join_channel()
+            ins.join_chn()
         if "433" in resp:
-            username = "_" + username
-            client.send_cmd(
-                "USER", "{} * * :{}".format(username, username))
-            client.send_cmd("NICK", username)
+            user = "_" + user
+            ins.send_cmd(
+                "USER", "{} * * :{}".format(user, user))
+            ins.send_cmd("NICK", user)
         if "PING" in resp:
-            client.send_cmd("PONG", ":" + resp.split(":")[1])
+            ins.send_cmd("PONG", ":" + resp.split(":")[1])
         if "366" in resp:
             joined = True
     while(cmd != "/quit"):
-        cmd = input("< {}> ".format(username)).strip()
+        cmd = input("< {}> ".format(user)).strip()
         if cmd == "/quit":
-            client.send_cmd("QUIT", "Good bye!")
-        client.send_message_to_channel(cmd)
-        response_thread = threading.Thread(target=print_response)
-        response_thread.daemon = True
-        response_thread.start()
+            ins.send_cmd("QUIT", "Good bye!")
+        ins.send_message_to_chn(cmd)
+        resp_thread = threading.Thread(target=print_resp)
+        resp_thread.daemon = True
+        resp_thread.start()
