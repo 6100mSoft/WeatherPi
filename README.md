@@ -1,11 +1,11 @@
-# irc-client
+# Teddiursa IRC Client
 
-Simple IRC (Internet Relay Chat) Client written in Python 2
+Simple IRC (Internet Relay Chat) Client written in Python 3. This fork aims to port the print statements to a character LCD. 
 
 
 ## Contributors
 
-Special thanks to Ilie Cebanu (https://github.com/NotQuiteMelvin) for Python 3 version.
+Special thanks to Ilie Cebanu (https://github.com/NotQuiteMelvin) for the Python 3 version and Rafal Janicki (https://github.com/bl4de) for the original version.
 
 
 ## Usage
@@ -15,31 +15,6 @@ To join any channel (on Freenode) with selected username, simply run irc_client.
 ```
 ./irc_client.py myusername channeltojoin
 ```
-
-or
-
-```
-./irc_client.py myusername #channeltojoin   // actually not working :)
-```
-
-__Seems that passing channel name with following # break script, as Python treats # as the begining of the comment?__
-
-
-## Sample conversation
-
-This is how it looks right now (left console: irc_client.py, right console: irssi):
-
-![Sample conversation](sample-talk.png)
-
-## Compiled to .pyc
-
-I've added verison compiled to Python bytecode file (with .pyc extension). Compilation is done by command:
-
-```
-$ python -m compileall irc_client.py
-```
-
-It might be useful to get binary version instead of cource code.
 
 
 ## Issues and further ideas/features
