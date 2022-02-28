@@ -50,10 +50,10 @@ if __name__=="__main__":
         res=ins.get()
         if n<=2:
             n=n+1
-            clean()
+            clr()
         else:
             n=n-3
-            clean()
+            clr()
         lcd.printline(n,res.strip())
         if "No Ident response" in res:
             ins.send("USER","{} * * :{}".format(usr,usr))
