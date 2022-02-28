@@ -6,8 +6,8 @@ import sys
 import liquidcrystal_i2c
 def usage():
     print("IRC simple Python ins | by bl4de | github.com/bl4de | twitter.com/_bl4de | hackerone.com/bl4de\n")
-    print("$ ./irc_ins.py user chn\n")
-    print("where: user - your user, chn - chn you'd like to join (eg. chnname or #chnname)")
+    print("$ ./irc_ins.py usr chn\n")
+    print("where: usr - your usr, chn - chn you'd like to join (eg. chnname or #chnname)")
 def chn(chn):
     if chn.startswith("#") == False:
         return "#" + chn
@@ -30,15 +30,15 @@ def print_resp():
             data = data - 3
             for y in range(0, 3):
                 lcd.printline(y, "")
-class IRCSimpleins:
-    def __init__(self, user, chn, server="irc.freenode.net", port=6667):
-        self.user = user
+class SimpleIRC:
+    def __init__(self, usr, chn, server="irc.freenode.net", port=6667):
+        self.usr = usr
         self.server = server
         self.port = port
         self.chn = chn
-    def connect(self):
+    def conn(self):
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.conn.connect((self.server, self.port))
+        self.conn.conn((self.server, self.port))
     def get_resp(self):
         return self.conn.recv(512).decode("utf-8")
     def send_cmd(self, cmd, message):
@@ -55,14 +55,14 @@ if __name__ == "__main__":
         usage()
         exit(0)
     else:
-        user = sys.argv[1]
+        usr = sys.argv[1]
         chn = chn(sys.argv[2])
     data = 0
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     cmd = ""
     joined = False
-    ins = IRCSimpleins(user, chn)
-    ins.connect()
+    ins = SimpleIRC(usr, chn)
+    ins.conn()
     int_data = 0
     while(joined == False):
         resp = ins.get_resp()
@@ -76,22 +76,22 @@ if __name__ == "__main__":
                 lcd.printline(y, "")
         lcd.printline(int_data, resp.strip())
         if "No Ident resp" in resp:
-            ins.send_cmd("NICK", user)
+            ins.send_cmd("NICK", usr)
             ins.send_cmd(
-                "USER", "{} * * :{}".format(user, user))
+                "usr", "{} * * :{}".format(usr, usr))
         if "376" in resp:
             ins.join_chn()
         if "433" in resp:
-            user = "_" + user
+            usr = "_" + usr
             ins.send_cmd(
-                "USER", "{} * * :{}".format(user, user))
-            ins.send_cmd("NICK", user)
+                "usr", "{} * * :{}".format(usr, usr))
+            ins.send_cmd("NICK", usr)
         if "PING" in resp:
             ins.send_cmd("PONG", ":" + resp.split(":")[1])
         if "366" in resp:
             joined = True
     while(cmd != "/quit"):
-        cmd = input("< {}> ".format(user)).strip()
+        cmd = input("< {}> ".format(usr)).strip()
         if cmd == "/quit":
             ins.send_cmd("QUIT", "Good bye!")
         ins.send_message_to_chn(cmd)
