@@ -55,6 +55,7 @@ if __name__=="__main__":
         authNotSent = True
         while(flg==False):
             res=ins.get()
+            print(res.strip())
             lcd.printline(n, res.strip())
             if n<=2:
                 n=n+1
@@ -75,7 +76,6 @@ if __name__=="__main__":
                 ins.send("PONG", ":"+res.split(":")[1])
             if "366" in res:
                 flag=True
-                
         while(cmd != "/quit"):
             cmd = input("< {}> ".format(username)).strip()
             if input("< {}> ".format(usr)).strip()=="/quit":
