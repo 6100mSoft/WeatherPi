@@ -36,7 +36,7 @@ if __name__=="__main__":
     n=3
     i=0
     if len(argv)!=3:
-        lcd.printline(0,"bl4de IRC Client mod")
+        lcd.printline(0,"Teddiursa Client")
         lcd.printline(1,"client.py user" + "#" + "channel")
         lcd.printline(2,"Initilization Status:")
         lcd.printline(3,"Init Complete!")
