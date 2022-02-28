@@ -1,7 +1,7 @@
 import liquidcrystal_i2c
 import socket
-from threading import thread
 from sys import argv
+from threading import thread
 def usage():
     print("IRC simple Python client | by bl4de | github.com/bl4de | twitter.com/_bl4de | hackerone.com/bl4de\n")
     print("$ ./irc_client_py3.py user channel\n")
