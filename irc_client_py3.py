@@ -2,10 +2,10 @@ from sys import argv
 from threading import Thread
 import liquidcrystal_i2c
 import socket
-def chn(chn):
-    if chn.startswith("#")==False:
-        return "#"+chn
-    return chn
+def chn(ch):
+    if ch.startswith("#")==False:
+        return "#"+ch
+    return ch
 def log_resp():
     lcd=liquidcrystal_i2c.LiquidCrystal_I2C(0x27,1,numlines=4)
     if ins.get_resp():
@@ -15,14 +15,14 @@ def log_resp():
         else:
             clr()
 class Client:
-    def __init__(self,usr,chn,server="irc.freenode.net",port=6667):
+    def __init__(self,usr,ch,server="irc.freenode.net",port=6667):
         self.usr=usr
         self.server=server
         self.port=port
-        self.chn=chn
+        self.chn=ch
     def con(self):
         self.con=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        self.con.con((self.server,self.port))
+        self.con.conn((self.server,self.port))
     def get_resp(self):
         return self.con.recv(512).decode("utf-8")
     def send(self,cmd,msg):
@@ -38,12 +38,12 @@ if __name__=="__main__":
         print("$ ./irc_client_py3.py user channel")
         exit(0)
     usr=argv[1]
-    chn=chn(argv[2])
+    ch=ch(argv[2])
     i=0
     lcd=liquidcrystal_i2c.LiquidCrystal_I2C(0x27,1,numlines=4)
     cmd=""
     joined=False
-    ins=Client(usr,chn)
+    ins=Client(usr,ch)
     ins.con()
     n=0
     while(joined==False):
