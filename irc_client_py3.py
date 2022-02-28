@@ -1,13 +1,11 @@
-#!/usr/bin/env python
-# by bl4de | github.com/bl4de | twitter.com/_bl4de | hackerone.com/bl4de
-import socket
-import threading
-import sys
 import liquidcrystal_i2c
+import socket
+from threading import thread
+from sys import argv
 def usage():
-    print("IRC simple Python ins | by bl4de | github.com/bl4de | twitter.com/_bl4de | hackerone.com/bl4de\n")
-    print("$ ./irc_ins.py usr chn\n")
-    print("where: usr - your usr, chn - chn you'd like to join (eg. chnname or #chnname)")
+    print("IRC simple Python client | by bl4de | github.com/bl4de | twitter.com/_bl4de | hackerone.com/bl4de\n")
+    print("$ ./irc_client_py3.py user channel\n")
+    print("where: usr - your user, channel - channel you'd like to join (eg. channel or #channel)")
 def chn(chn):
     if chn.startswith("#") == False:
         return "#" + chn
@@ -17,20 +15,15 @@ def print_resp():
     resp = ins.get_resp()
     if resp:
         msg = resp.strip().split(":")
-        if data <= 3:
-            lcd.printline(data,"< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
+        if i <= 3:
+            lcd.printline(data,"< {}> {}".format(
+                msg[1].split("!")[0],msg[2].strip()))
         else:
-            for x in range(0, 3):
-                lcd.printline(x, "")
-        if data <= 2:
-            data = data + 1
-            for x in range(0, 3):
-                lcd.printline(x, "")
-        else:
-            data = data - 3
-            for y in range(0, 3):
-                lcd.printline(y, "")
-class SimpleIRC:
+            clean()
+        if i <= 2:
+            i = i + 1
+            clean()
+class Client:
     def __init__(self, usr, chn, server="irc.freenode.net", port=6667):
         self.usr = usr
         self.server = server
@@ -41,60 +34,57 @@ class SimpleIRC:
         self.conn.conn((self.server, self.port))
     def get_resp(self):
         return self.conn.recv(512).decode("utf-8")
-    def send_cmd(self, cmd, message):
-        command = "{} {}\r\n".format(cmd, message).encode("utf-8")
-        self.conn.send(command)
-    def send_message_to_chn(self, message):
+    def send(self, cmd, message):
+        self.conn.send("{} {}\r\n".format(cmd,message).encode("utf-8"))
+    def sendmsg2chn(self, message):
         command = "PRIVMSG {}".format(self.chn)
         self.send_cmd(command, ":" + message)
-    def join_chn(self):
-        chn = self.chn
-        self.send_cmd("JOIN", chn)
+    def join(self):
+        self.send_cmd("JOIN", self.chn)
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
+    if len(argv) != 3:
         usage()
         exit(0)
     else:
-        usr = sys.argv[1]
-        chn = chn(sys.argv[2])
-    data = 0
+        usr = argv[1]
+        chn = chn(argv[2])
+    i = 0
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     cmd = ""
     joined = False
-    ins = SimpleIRC(usr, chn)
+    ins = Client(usr, chn)
     ins.conn()
-    int_data = 0
+    num = 0
     while(joined == False):
         resp = ins.get_resp()
-        if data <= 2:
-            data = data + 1
-            for x in range(0, 3):
-                lcd.printline(x, "")
+        if num <= 2:
+            num = num + 1
+            clean()
         else:
-            data = data - 3
-            for y in range(0, 3):
-                lcd.printline(y, "")
-        lcd.printline(int_data, resp.strip())
+            num = num - 3
+            clean()
+        lcd.printline(num, resp.strip())
         if "No Ident resp" in resp:
-            ins.send_cmd("NICK", usr)
-            ins.send_cmd(
-                "usr", "{} * * :{}".format(usr, usr))
+            ins.send("NICK", usr)
+            ins.send("usr","{} * * :{}".format(usr,usr))
         if "376" in resp:
-            ins.join_chn()
+            ins.join()
         if "433" in resp:
             usr = "_" + usr
-            ins.send_cmd(
-                "usr", "{} * * :{}".format(usr, usr))
-            ins.send_cmd("NICK", usr)
+            ins.send("usr","{} * * :{}".format(usr,usr))
+            ins.send("NICK", usr)
         if "PING" in resp:
-            ins.send_cmd("PONG", ":" + resp.split(":")[1])
+            ins.send("PONG", ":" + resp.split(":")[1])
         if "366" in resp:
             joined = True
     while(cmd != "/quit"):
         cmd = input("< {}> ".format(usr)).strip()
         if cmd == "/quit":
             ins.send_cmd("QUIT", "Good bye!")
-        ins.send_message_to_chn(cmd)
-        resp_thread = threading.Thread(target=print_resp)
-        resp_thread.daemon = True
-        resp_thread.start()
+        ins.sendmsg2chn(cmd)
+        node = Thread(target=print_resp)
+        node.daemon = True
+        node.start()
+def clean():
+    for x in range(0, 3):
+        lcd.printline(x, "")
