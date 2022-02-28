@@ -18,10 +18,10 @@ def log():
         else:
             clr()
 class Client:
-    def __init__(self,usr,ch,srv="irc.freenode.net",port=6667):
+    def __init__(self,usr,ch,srv="irc.freenode.net",dev=6667):
         self.usr=usr
         self.srv=srv
-        self.port=port
+        self.dev=dev
         self.ch=ch
     def con(self):
         self.con=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -45,11 +45,11 @@ if __name__=="__main__":
     i=0
     lcd=liquidcrystal_i2c.LiquidCrystal_I2C(0x27,1,numlines=4)
     cmd=""
-    joined=False
+    flag=False
     ins=Client(usr,ch)
     ins.con()
     n=0
-    while(joined==False):
+    while(flag==False):
         res=ins.get()
         if n<=2:
             n=n+1
@@ -70,7 +70,7 @@ if __name__=="__main__":
         if "PING" in res:
             ins.send("PONG", ":"+res.split(":")[1])
         if "366" in res:
-            joined=True
+            flag=True
     while(cmd != "/quit"):
         if input("< {}> ".format(usr)).strip()=="/quit":
             ins.send("QUIT", "Good bye!")
