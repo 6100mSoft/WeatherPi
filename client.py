@@ -1,6 +1,7 @@
 from sys import argv
 from threading import Thread
 import liquidcrystal_i2c
+import random
 import socket
 def clr():
     for x in range(0,3):
@@ -9,10 +10,10 @@ def log():
     lcd=liquidcrystal_i2c.LiquidCrystal_I2C(0x27,1,numlines=4)
     if ins.get():
         msg=ins.get().strip().split(":")
-        if i<=3:
-            lcd.printline(i,"< {}> {}".format(msg[1].split("!")[0],msg[2].strip()))
-        else:
-            clr()
+    if i<=3:
+        lcd.printline(i,"< {}> {}".format(msg[1].split("!")[0],msg[2].strip()))
+    else:
+        clr()
 class Client:
     def __init__(self,usr,ch,srv="irc.freenode.net",dev=6667):
         self.usr=usr
@@ -68,26 +69,26 @@ if __name__=="__main__":
             if "No Ident response" in res or authNotSent:
                 ins.send("USER","{} * * :{}".format(usr,usr))
                 ins.send("NICK",usr)
-                ins.send("PRIVMSG",f"{ch} :"+f"Client Node: {Seed} | Teddiursa IRC Client: Missing ident response, retrying...")
+                ins.send("PRIVMSG",f"{ch} :"+f"Client Node: {seed} | Teddiursa IRC Client: Missing ident response, retrying...")
                 authNotSent = False
             if "376" in res:
                 ins.join()
-                ins.send("PRIVMSG",f"{ch} :"+f"Client Node: {Seed} | Teddiursa IRC Client: User has joined. DL the client @ this link if you want to use it too: https://github.com/6100m/irc-client-lcdmod/")
+                ins.send("PRIVMSG",f"{ch} :"+f"Client Node: {seed} | Teddiursa IRC Client: User has joined. DL Teddiursa IRC Client @ https://github.com/6100m/irc-client-lcdmod/")
             if "433" in res:
                 ins.send("USER","{} * * :{}".format("_"+usr,"_"+usr))
                 ins.send("NICK","_"+usr)
-                ins.send("PRIVMSG",f"{ch} :"+f"Client Node: {Seed} | Teddiursa IRC Client: Got code 433.")
+                ins.send("PRIVMSG",f"{ch} :"+f"Client Node: {seed} | Teddiursa IRC Client: Got code 433.")
             if "PING" in res:
                 ins.send("PONG", ":"+res.split(":")[1])
-                ins.send("PRIVMSG",f"{ch} :"+f"Client Node: {Seed} | Teddiursa IRC Client: Testing ping....")
+                ins.send("PRIVMSG",f"{ch} :"+f"Client Node: {seed} | Teddiursa IRC Client: Testing ping....")
             if "366" in res:
                 flg=True
-                ins.send("PRIVMSG",f"{ch} :"+f"Client Node: {Seed} | Teddiursa IRC Client: Got code 366.")
+                ins.send("PRIVMSG",f"{ch} :"+f"Client Node: {seed} | Teddiursa IRC Client: Got code 366.")
         while(cmd != "/quit"):
-            cmd = input("< {}> ".format(username)).strip()
+            cmd = input("< {}> ".format(usr)).strip()
             if cmd =="/quit":
                 ins.send("QUIT", "Good bye!")
-            ins.send(cmd)
+            ins.msgr(cmd)
             run=Thread(target=log)
             run.daemon=True
             clr()
