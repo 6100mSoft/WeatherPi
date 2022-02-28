@@ -22,7 +22,7 @@ class Client:
         self.chn=chn
     def con(self):
         self.con=sock.sock(sock.AF_INET,sock.SOCK_STREAM)
-        self.con.con((self.server, self.port))
+        self.con.con((self.server,self.port))
     def get_resp(self):
         return self.con.recv(512).decode("utf-8")
     def send(self,cmd,msg):
@@ -56,14 +56,14 @@ if __name__ == "__main__":
             clean()
         lcd.printline(n,resp.strip())
         if "No Ident resp" in resp:
-            ins.send("NICK", usr)
             ins.send("USER","{} * * :{}".format(usr,usr))
+            ins.send("NICK",usr)
         if "376" in resp:
             ins.join()
         if "433" in resp:
             usr="_"+usr
             ins.send("USER","{} * * :{}".format(usr,usr))
-            ins.send("NICK", usr)
+            ins.send("NICK",usr)
         if "PING" in resp:
             ins.send("PONG", ":"+resp.split(":")[1])
         if "366" in resp:
