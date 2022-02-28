@@ -1,59 +1,50 @@
 import liquidcrystal_i2c
-import socket
+import socket as sock
 from sys import argv
 from threading import thread
-def usage():
-    print("IRC simple Python client | by bl4de | github.com/bl4de | twitter.com/_bl4de | hackerone.com/bl4de\n")
-    print("$ ./irc_client_py3.py user channel\n")
-    print("where: usr - your user, channel - channel you'd like to join (eg. channel or #channel)")
 def chn(chn):
     if chn.startswith("#") == False:
         return "#" + chn
     return chn
-def print_resp():
-    lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
-    resp = ins.get_resp()
-    if resp:
-        msg = resp.strip().split(":")
+def log_resp():
+    lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27,1,numlines=4)
+    if ins.get_resp():
+        msg = ins.get_resp().strip().split(":")
         if i <= 3:
-            lcd.printline(data,"< {}> {}".format(
-                msg[1].split("!")[0],msg[2].strip()))
+            lcd.printline(i,"< {}> {}".format(msg[1].split("!")[0],msg[2].strip()))
         else:
-            clean()
-        if i <= 2:
-            i = i + 1
-            clean()
+            clr()
 class Client:
-    def __init__(self, usr, chn, server="irc.freenode.net", port=6667):
+    def __init__(self,usr,chn,server="irc.freenode.net",port=6667):
         self.usr = usr
         self.server = server
         self.port = port
         self.chn = chn
-    def conn(self):
-        self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.conn.conn((self.server, self.port))
+    def con(self):
+        self.con = sock.sock(sock.AF_INET,sock.SOCK_STREAM)
+        self.con.con((self.server, self.port))
     def get_resp(self):
-        return self.conn.recv(512).decode("utf-8")
-    def send(self, cmd, message):
-        self.conn.send("{} {}\r\n".format(cmd,message).encode("utf-8"))
-    def sendmsg2chn(self, message):
-        command = "PRIVMSG {}".format(self.chn)
-        self.send_cmd(command, ":" + message)
+        return self.con.recv(512).decode("utf-8")
+    def send(self, cmd, msg):
+        self.con.send("{} {}\r\n".format(cmd,msg).encode("utf-8"))
+    def send2ch(self, msg):
+        cmd = "PRIVMSG {}".format(self.chn)
+        self.send_cmd(cmd, ":" + msg)
     def join(self):
         self.send_cmd("JOIN", self.chn)
 if __name__ == "__main__":
     if len(argv) != 3:
-        usage()
+        print("IRC simple Python client | by bl4de \n")
+        print("$ ./irc_client_py3.py user channel")
         exit(0)
-    else:
-        usr = argv[1]
-        chn = chn(argv[2])
+    usr = argv[1]
+    chn = chn(argv[2])
     i = 0
-    lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
+    lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27,1,numlines=4)
     cmd = ""
     joined = False
-    ins = Client(usr, chn)
-    ins.conn()
+    ins = Client(usr,chn)
+    ins.con()
     n = 0
     while(joined == False):
         resp = ins.get_resp()
@@ -78,11 +69,10 @@ if __name__ == "__main__":
         if "366" in resp:
             joined = True
     while(cmd != "/quit"):
-        cmd = input("< {}> ".format(usr)).strip()
-        if cmd == "/quit":
+        if input("< {}> ".format(usr)).strip() == "/quit":
             ins.send_cmd("QUIT", "Good bye!")
-        ins.sendmsg2chn(cmd)
-        run = Thread(target=print_resp)
+        ins.send2ch(cmd)
+        run = Thread(target=log_resp)
         run.daemon = True
         run.start()
 def clean():
