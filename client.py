@@ -99,7 +99,7 @@ if __name__ == "__main__":
                 ins.send(
                     "PRIVMSG",
                     f"{ch} :"
-                    + f"Client Node: {seed} | Teddiursa IRC Client: User has joined. DL Teddiursa IRC Client @ https://github.com/6100m/irc-client-lcdmod/",
+                    + f"Client Node: {seed} | Teddiursa IRC Client: User has joined. DL Teddiursa IRC Client @ https://github.com/6100m/Teddiursa-IRC-Client/",
                 )
             if "433" in res:
                 ins.send("USER", "{} * * :{}".format("_" + usr, "_" + usr))
