@@ -24,7 +24,7 @@ class Client:
         self.con.connect((self.srv,self.dev))
     def get(self):
         return self.con.recv(512).decode("utf-8")
-    def send(self,cmd,msg,n):
+    def send(self,cmd,msg):
         self.con.send("{} {}\r\n".format(cmd,msg).encode("utf-8"))
     def msgr(self,msg):
         cmd="PRIVMSG {}".format(self.ch)
@@ -62,21 +62,21 @@ if __name__=="__main__":
                 n=n-3
                 clr()
             if "No Ident response" in res or authNotSent:
-                ins.send("USER","{} * * :{}".format(usr,usr),n)
+                ins.send("USER","{} * * :{}".format(usr,usr))
                 ins.send("NICK",usr,n)
                 authNotSent = False
             if "376" in res:
                 ins.join()
             if "433" in res:
-                ins.send("USER","{} * * :{}".format("_"+usr,"_"+usr),n)
+                ins.send("USER","{} * * :{}".format("_"+usr,"_"+usr))
                 ins.send("NICK","_"+usr)
             if "PING" in res:
-                ins.send("PONG", ":"+res.split(":")[1],n)
+                ins.send("PONG", ":"+res.split(":")[1])
             if "366" in res:
                 flag=True
         while(cmd != "/quit"):
             if input("< {}> ".format(usr)).strip()=="/quit":
-                ins.send("QUIT", "Good bye!",n)
+                ins.send("QUIT", "Good bye!")
             ins.msgr(cmd)
             run=Thread(target=log)
             run.daemon=True
