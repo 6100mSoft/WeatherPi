@@ -75,6 +75,6 @@ if __name__=="__main__":
         run=Thread(target=log_resp)
         run.daemon=True
         run.start()
-def clean():
+def clr():
     for x in range(0,3):
         lcd.printline(x,"")
