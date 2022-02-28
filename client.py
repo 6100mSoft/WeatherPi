@@ -7,8 +7,8 @@ def clr():
         lcd.printline(x,"")
 def log():
     lcd=liquidcrystal_i2c.LiquidCrystal_I2C(0x27,1,numlines=4)
-    if ins.get_resp():
-        msg=ins.get_resp().strip().split(":")
+    if ins.get():
+        msg=ins.get().strip().split(":")
         if i<=3:
             lcd.printline(i,"< {}> {}".format(msg[1].split("!")[0],msg[2].strip()))
         else:
