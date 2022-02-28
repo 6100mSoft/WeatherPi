@@ -15,19 +15,19 @@ def log_resp():
         else:
             clr()
 class Client:
-    def __init__(self,usr,ch,server="irc.freenode.net",port=6667):
+    def __init__(self,usr,ch,srv="irc.freenode.net",port=6667):
         self.usr=usr
-        self.server=server
+        self.srv=srv
         self.port=port
         self.chn=ch
     def con(self):
         self.con=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         self.con.conn((self.server,self.port))
-    def get_resp(self):
+    def get(self):
         return self.con.recv(512).decode("utf-8")
     def send(self,cmd,msg):
-        self.con.send("{} {}\r\n".format(cmd,msg).encode("utf-8"))
-    def send2ch(self,msg):
+        self.connect.send("{} {}\r\n".format(cmd,msg).encode("utf-8"))
+    def add2ch(self,msg):
         cmd="PRIVMSG {}".format(self.chn)
         self.send_cmd(cmd,":"+msg)
     def join(self):
@@ -47,7 +47,7 @@ if __name__=="__main__":
     ins.con()
     n=0
     while(joined==False):
-        res=ins.get_resp()
+        res=ins.get()
         if n<=2:
             n=n+1
             clean()
@@ -71,7 +71,7 @@ if __name__=="__main__":
     while(cmd != "/quit"):
         if input("< {}> ".format(usr)).strip() == "/quit":
             ins.send_cmd("QUIT", "Good bye!")
-        ins.send2ch(cmd)
+        ins.add2ch(cmd)
         run=Thread(target=log_resp)
         run.daemon=True
         run.start()
