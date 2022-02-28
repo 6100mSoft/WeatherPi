@@ -36,10 +36,10 @@ if __name__=="__main__":
     n=3
     i=0
     if len(argv)!=3:
-        lcd.printline(0, "Mod of bl4de's IRC client")
-        lcd.printline(1, "./irc_client_py3.py user #channel")
-        lcd.printline(2, "Initilization Status:")
-        lcd.printline(3, "Init Complete!")
+        lcd.printline(0,"bl4de IRC Client mod")
+        lcd.printline(1,"irc_client_py3.py user #channel")
+        lcd.printline(2,"Initilization Status:")
+        lcd.printline(3,"Init Complete!")
         exit(0)
     usr=argv[1]
     ch=f"#{argv[2]}"
@@ -47,8 +47,8 @@ if __name__=="__main__":
     flg=False
     ins=Client(usr,ch)
     ins.con()
-    lcd.printline(2, "Bootup Status:")
-    lcd.printline(3, "Bootup Complete!")
+    lcd.printline(2,"Bootup Status:")
+    lcd.printline(3,"Bootup Complete!")
     while(flg==False):
         res=ins.get()
         if n<=2:
