@@ -66,19 +66,21 @@ if __name__=="__main__":
             if "No Ident response" in res or authNotSent:
                 ins.send("USER","{} * * :{}".format(usr,usr))
                 ins.send("NICK",usr)
-                ins.msgr("Test")
+                ins.send("PRIVMSG","#Windows95 :"+"test")
                 authNotSent = False
             if "376" in res:
                 ins.join()
+                ins.send("PRIVMSG","#Windows95 :"+"test")
             if "433" in res:
                 ins.send("USER","{} * * :{}".format("_"+usr,"_"+usr))
                 ins.send("NICK","_"+usr)
-                ins.msgr("Test")
+                ins.send("PRIVMSG","#Windows95 :"+"test")
             if "PING" in res:
                 ins.send("PONG", ":"+res.split(":")[1])
             if "366" in res:
                 flag=True
-        ins.msgr("Test")
+                ins.send("PRIVMSG","#Windows95 :"+"test")
+        ins.send("PRIVMSG","#Windows95 :"+"test")
         while(cmd != "/quit"):
             cmd = input("< {}> ".format(username)).strip()
             if cmd =="/quit":
