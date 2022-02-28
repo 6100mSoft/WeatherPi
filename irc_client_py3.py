@@ -54,16 +54,16 @@ if __name__ == "__main__":
     joined = False
     ins = Client(usr, chn)
     ins.conn()
-    num = 0
+    n = 0
     while(joined == False):
         resp = ins.get_resp()
-        if num <= 2:
-            num = num + 1
+        if n <= 2:
+            n = n + 1
             clean()
         else:
-            num = num - 3
+            n = n - 3
             clean()
-        lcd.printline(num, resp.strip())
+        lcd.printline(n, resp.strip())
         if "No Ident resp" in resp:
             ins.send("NICK", usr)
             ins.send("usr","{} * * :{}".format(usr,usr))
