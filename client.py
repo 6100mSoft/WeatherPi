@@ -66,12 +66,14 @@ if __name__=="__main__":
             if "No Ident response" in res or authNotSent:
                 ins.send("USER","{} * * :{}".format(usr,usr))
                 ins.send("NICK",usr)
+                ins.msgr("Test")
                 authNotSent = False
             if "376" in res:
                 ins.join()
             if "433" in res:
                 ins.send("USER","{} * * :{}".format("_"+usr,"_"+usr))
                 ins.send("NICK","_"+usr)
+                ins.msgr("Test")
             if "PING" in res:
                 ins.send("PONG", ":"+res.split(":")[1])
             if "366" in res:
