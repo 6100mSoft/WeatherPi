@@ -63,7 +63,7 @@ if __name__=="__main__":
                 clr()
             if "No Ident response" in res or authNotSent:
                 ins.send("USER","{} * * :{}".format(usr,usr))
-                ins.send("NICK",usr,n)
+                ins.send("NICK",usr)
                 authNotSent = False
             if "376" in res:
                 ins.join()
