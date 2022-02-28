@@ -41,46 +41,47 @@ if __name__=="__main__":
         lcd.printline(2,"Initilization Status:")
         lcd.printline(3,"Init Complete!")
         exit(0)
-    usr=argv[1]
-    ch=f"#{argv[2]}"
-    cmd=""
-    flg=False
-    ins=Client(usr,ch)
-    ins.con()
-    lcd.printline(2,"Bootup Status:")
-    lcd.printline(3,"Bootup Complete!")
-    # Proper registration implementation by my friend epicness @ github.com/3picness
-    # Thanks! :3
-    authNotSent = True
-    while(flg==False):
-        res=ins.get()
-        if n<=2:
-            n=n+1
+    else:
+        usr=argv[1]
+        ch=f"#{argv[2]}"
+        cmd=""
+        flg=False
+        ins=Client(usr,ch)
+        ins.con()
+        lcd.printline(2,"Bootup Status:")
+        lcd.printline(3,"Bootup Complete!")
+        # Proper registration implementation by my friend epicness @ github.com/3picness
+        # Thanks! :3
+        authNotSent = True
+        while(flg==False):
+            res=ins.get()
+            if n<=2:
+                n=n+1
+                clr()
+            else:
+                n=n-3
+                clr()
+            if "No Ident response" in res or authNotSent:
+                lcd.printline("USER","{} * * :{}".format(usr,usr))
+                ins.send("USER","{} * * :{}".format(usr,usr))
+                ins.send("NICK",usr)
+                authNotSent = False
+            if "376" in res:
+                ins.join()
+            if "433" in res:
+                usr="_"+usr
+                lcd.printline("USER","{} * * :{}".format(usr,usr))
+                ins.send("USER","{} * * :{}".format(usr,usr))
+                ins.send("NICK",usr)
+            if "PING" in res:
+                ins.send("PONG", ":"+res.split(":")[1])
+            if "366" in res:
+                flag=True
+        while(cmd != "/quit"):
+            if input("< {}> ".format(usr)).strip()=="/quit":
+                ins.send("QUIT", "Good bye!")
+            ins.msgr(cmd)
+            run=Thread(target=log)
+            run.daemon=True
             clr()
-        else:
-            n=n-3
-            clr()
-        if "No Ident response" in res or authNotSent:
-            lcd.printline("USER","{} * * :{}".format(usr,usr))
-            ins.send("USER","{} * * :{}".format(usr,usr))
-            ins.send("NICK",usr)
-            authNotSent = False
-        if "376" in res:
-            ins.join()
-        if "433" in res:
-            usr="_"+usr
-            lcd.printline("USER","{} * * :{}".format(usr,usr))
-            ins.send("USER","{} * * :{}".format(usr,usr))
-            ins.send("NICK",usr)
-        if "PING" in res:
-            ins.send("PONG", ":"+res.split(":")[1])
-        if "366" in res:
-            flag=True
-    while(cmd != "/quit"):
-        if input("< {}> ".format(usr)).strip()=="/quit":
-            ins.send("QUIT", "Good bye!")
-        ins.msgr(cmd)
-        run=Thread(target=log)
-        run.daemon=True
-        clr()
-        run.start()
+            run.start()
