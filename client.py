@@ -55,6 +55,7 @@ if __name__=="__main__":
         authNotSent = True
         while(flg==False):
             res=ins.get()
+            print(res.strip())
             if n<=2:
                 n=n+1
                 clr()
