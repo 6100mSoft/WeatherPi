@@ -78,7 +78,7 @@ if __name__=="__main__":
                 flag=True
         while(cmd != "/quit"):
             cmd = input("< {}> ".format(username)).strip()
-            if input("< {}> ".format(usr)).strip()=="/quit":
+            if cmd =="/quit":
                 ins.send("QUIT", "Good bye!")
             ins.msgr(cmd)
             run=Thread(target=log)
