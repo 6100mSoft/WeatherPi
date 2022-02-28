@@ -15,27 +15,31 @@ def log():
     if ins.get():
         msg = ins.get().strip().split(":")
     if i <= 3:
-        lcd.printline(i, "< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
+        lcd.printline(i, "< {}> {}".format(
+            msg[1].split("!")[0], msg[2].strip()))
     else:
         clr()
 
 
 class Client:
-    def __init__(self, usr, ch, srv="irc.freenode.net", dev=6667):
+    def __init__(
+        self, usr, ch, srv="irc.freenode.net", dev=6667):
         self.usr = usr
         self.srv = srv
         self.dev = dev
         self.ch = ch
 
     def con(self):
-        self.con = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.con = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM)
         self.con.connect((self.srv, self.dev))
 
     def get(self):
         return self.con.recv(512).decode("utf-8")
 
     def send(self, cmd, msg):
-        self.con.send("{} {}\r\n".format(cmd, msg).encode("utf-8"))
+        self.con.send("{} {}\r\n".format(
+            cmd, msg).encode("utf-8"))
 
     def msgr(self, msg):
         cmd = "PRIVMSG {}".format(self.ch)
@@ -66,7 +70,9 @@ if __name__ == "__main__":
         random.random()
         lcd.printline(2, "Bootup Status:")
         lcd.printline(3, "Bootup Complete!")
-        # Proper registration implementation by my friend epicness @ github.com/3picness
+        # Proper registration implementation 
+        # by my friend epicness @ 
+        # github.com/3picness
         # Thanks! :3
         authNotSent = True
         while flg == False:
@@ -117,8 +123,14 @@ if __name__ == "__main__":
                     f"{ch} :"
                     + f"Client Node: {seed} | Teddiursa IRC Client: Got code 366.",
                 )
+        a_int = 0
         while cmd != "/quit":
             cmd = input("< {}> ".format(usr)).strip()
+            if a_int <= 2:
+                a_int = a_int + 1
+            else:
+                a_int = a_int - 3
+            lcd.printline(a_int, cmd)
             if cmd == "/quit":
                 ins.send("QUIT", "Good bye!")
             ins.msgr(cmd)
