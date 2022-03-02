@@ -162,6 +162,11 @@ if __name__ == "__main__":
             lcd.printline(a_int, cmd)
             if cmd == "/quit":
                 ins.send("QUIT", "Good bye!")
+            if cmd == "//refresh":
+                lcd.printline(0, "")
+                lcd.printline(1, "")
+                lcd.printline(2, "")
+                lcd.printline(3, "")
             ins.msgr(cmd)
             run = Thread(target=log)
             run.daemon = True
