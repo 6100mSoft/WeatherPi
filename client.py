@@ -72,8 +72,8 @@ if __name__ == "__main__":
         random.random()
         lcd.printline(2, "Bootup Status:")
         lcd.printline(3, "Bootup Complete!")
-        # Proper registration implementation 
-        # by my friend epicness @ 
+        # Proper registration implementation
+        # by my friend epicness @
         # github.com/3picness
         # Thanks! :3
         authNotSent = True
@@ -92,39 +92,37 @@ if __name__ == "__main__":
             f3 = open("conf3.txt", "r")
             f4 = open("conf4.txt", "r")
             f5 = open("conf5.txt", "r")
-            dict_data = [
-                f1.read()
-                f2.read()
-                f3.read()
-                f4.read()
-                f5.read()
-            ]
+            f0 = f1.read()
+            f1 = f2.read()
+            f2 = f3.read()
+            f3 = f4.read()
+            f4 = f5.read()
             if "No Ident response" in res or authNotSent:
                 ins.send("USER", "{} * * :{}".format(usr, usr))
                 ins.send("NICK", usr)
-                if dict_data[1] = 0:
+                if f0 == 0:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
-                        + f"Client Node: {seed} | Teddiursa IRC Client: Missing ident response, retrying...",
+                        + f"Client Node: {seed} | Teddiursa IRC Client: Missing ident response, >
                     )
                 else:
                     print("type 0 --- flag 0 flashed")
                 authNotSent = False
             if "376" in res:
                 ins.join()
-                if dict_data[1] = 0:
+                if f1 == 0:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
-                        + f"Client Node: {seed} | Teddiursa IRC Client: User has joined. DL Teddiursa IRC Client @ https://github.com/6100m/Teddiursa-IRC-Client/",
+                        + f"Client Node: {seed} | Teddiursa IRC Client: User has joined. DL Tedd>
                     )
                 else:
                     print("type 1 --- flag 0 flashed")
             if "433" in res:
                 ins.send("USER", "{} * * :{}".format("_" + usr, "_" + usr))
                 ins.send("NICK", "_" + usr)
-                if dict_data[2] = 0:
+                if f2 == 0:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
@@ -134,17 +132,18 @@ if __name__ == "__main__":
                     print("type 2 --- flag 0 flashed")
             if "PING" in res:
                 ins.send("PONG", ":" + res.split(":")[1])
-                if dict_data[2] = 0:
+                if f3 == 0:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
                         + f"Client Node: {seed} | Teddiursa IRC Client: Testing ping....",
                     )
+
                 else:
                     print("type 3 --- flag 0 flashed")
             if "366" in res:
                 flg = True
-                if dict_data[2] = 0:
+                if f4 == 0:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
