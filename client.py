@@ -10,14 +10,14 @@ def clr():
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     for x in range(0, 3):
         lcd.printline(x, "")
-    time.sleep(2)
+    print("clear func trigger pulled")
 
 def refresh():
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     for x in range(0, 3):
         lcd.printline(x, "")
     print("refresh func trigger pulled")
-     
+    time.sleep(2)
 
 def log():
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
