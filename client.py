@@ -3,12 +3,21 @@ from threading import Thread
 import liquidcrystal_i2c
 import random
 import socket
-
+import time
+import threading
 
 def clr():
+    lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     for x in range(0, 3):
         lcd.printline(x, "")
+    time.sleep(2)
 
+def refresh():
+    lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
+    for x in range(0, 3):
+        lcd.printline(x, "")
+    print("refresh func trigger pulled")
+     
 
 def log():
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
@@ -70,6 +79,7 @@ if __name__ == "__main__":
         ins = Client(usr, ch)
         ins.con()
         random.random()
+        clr()
         lcd.printline(2, "Bootup Status:")
         lcd.printline(3, "Bootup Complete!")
         # Proper registration implementation
@@ -167,6 +177,7 @@ if __name__ == "__main__":
                 lcd.printline(1, "")
                 lcd.printline(2, "")
                 lcd.printline(3, "")
+            thread.start_new_thread( refresh, ("Thread-1", 2, ) )
             ins.msgr(cmd)
             run = Thread(target=log)
             run.daemon = True
