@@ -14,7 +14,6 @@ import pathlib
 def get():
     return Path( __file__ ).parent.absolute()
 
-
 def clr():
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     for x in range(0, 3):
@@ -35,20 +34,23 @@ def log():
     if ins.get():
         msg = ins.get().strip().split(":")
     if i <= 3:
-        lcd.printline(i, "< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
+        lcd.printline(i, "< {}> {}".format(
+            msg[1].split("!")[0], msg[2].strip()))
     else:
         clr()
 
 
 class Client:
-    def __init__(self, usr, ch, srv="irc.freenode.net", dev=6667):
+    def __init__(self, usr, ch,
+                 srv="irc.freenode.net", dev=6667):
         self.usr = usr
         self.srv = srv
         self.dev = dev
         self.ch = ch
 
     def con(self):
-        self.con = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.con = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM)
         self.con.connect((self.srv, self.dev))
 
     def get(self):
@@ -107,7 +109,7 @@ if __name__ == "__main__":
             if "No Ident response" in res or authNotSent:
                 ins.send("USER", "{} * * :{}".format(usr, usr))
                 ins.send("NICK", usr)
-                if config["debugflag1"] == true:
+                if config["debugflag1"] == True:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
@@ -118,7 +120,7 @@ if __name__ == "__main__":
                 authNotSent = False
             if "376" in res:
                 ins.join()
-                if config["debugflag2"] == true:
+                if config["debugflag2"] == True:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
@@ -129,7 +131,7 @@ if __name__ == "__main__":
             if "433" in res:
                 ins.send("USER", "{} * * :{}".format("_" + usr, "_" + usr))
                 ins.send("NICK", "_" + usr)
-                if config["debugflag3"] == true:
+                if config["debugflag3"] == True:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
@@ -139,7 +141,7 @@ if __name__ == "__main__":
                     print("type 2 --- flag 0 flashed")
             if "PING" in res:
                 ins.send("PONG", ":" + res.split(":")[1])
-                if config["debugflag4"] == true:
+                if config["debugflag4"] == True:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
@@ -150,7 +152,7 @@ if __name__ == "__main__":
                     print("type 3 --- flag 0 flashed")
             if "366" in res:
                 flg = True
-                if config["debugflag5"] == true:
+                if config["debugflag5"] == True:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
