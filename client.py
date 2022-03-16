@@ -101,7 +101,7 @@ if __name__ == "__main__":
             else:
                 n = n - 3
                 clr()
-            with open(str(get()) + "debug.json", "r") as f:
+            with open(str(get()) + "/debug.json", "r") as f:
                 config = load(f)
             if "No Ident response" in res or authNotSent:
                 ins.send("USER", "{} * * :{}".format(usr, usr))
