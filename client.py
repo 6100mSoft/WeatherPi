@@ -11,7 +11,7 @@ import pathlib
 
 
 def get():
-    return Path(__file__).absolute()
+    return Path( __file__ ).parent.absolute()
 
 
 def clr():
