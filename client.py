@@ -101,7 +101,7 @@ if __name__ == "__main__":
             else:
                 n = n - 3
                 clr()
-            with open(get() + "debug.json", "r") as f:
+            with open(str(get()) + "debug.json", "r") as f:
                 config = load(f)
             if "No Ident response" in res or authNotSent:
                 ins.send("USER", "{} * * :{}".format(usr, usr))
@@ -170,8 +170,6 @@ if __name__ == "__main__":
             if cmd == "//refresh":
                 for x in range(0, 3):
                     lcd.printline(x, "")
-            # Disabled by 6100m
-            # threading.thread.start_new_thread( refresh, ("Thread-1", 2, ) )
             ins.msgr(cmd)
             run = threading.Thread(target=log)
             run.daemon = True
