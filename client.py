@@ -1,16 +1,25 @@
+from pathlib import Path
 from sys import argv
-from threading import Thread
+import threading
 import liquidcrystal_i2c
 import random
 import socket
 import time
 import threading
+import json
+import pathlib
+
+
+def get():
+    return Path(__file__).absolute()
+
 
 def clr():
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     for x in range(0, 3):
         lcd.printline(x, "")
     print("clear func trigger pulled")
+
 
 def refresh():
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
@@ -19,36 +28,33 @@ def refresh():
     print("refresh func trigger pulled")
     time.sleep(2)
 
+
 def log():
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     if ins.get():
         msg = ins.get().strip().split(":")
     if i <= 3:
-        lcd.printline(i, "< {}> {}".format(
-            msg[1].split("!")[0], msg[2].strip()))
+        lcd.printline(i, "< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
     else:
         clr()
 
 
 class Client:
-    def __init__(
-        self, usr, ch, srv="irc.freenode.net", dev=6667):
+    def __init__(self, usr, ch, srv="irc.freenode.net", dev=6667):
         self.usr = usr
         self.srv = srv
         self.dev = dev
         self.ch = ch
 
     def con(self):
-        self.con = socket.socket(
-            socket.AF_INET, socket.SOCK_STREAM)
+        self.con = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.con.connect((self.srv, self.dev))
 
     def get(self):
         return self.con.recv(512).decode("utf-8")
 
     def send(self, cmd, msg):
-        self.con.send("{} {}\r\n".format(
-            cmd, msg).encode("utf-8"))
+        self.con.send("{} {}\r\n".format(cmd, msg).encode("utf-8"))
 
     def msgr(self, msg):
         cmd = "PRIVMSG {}".format(self.ch)
@@ -63,10 +69,8 @@ if __name__ == "__main__":
     n = 3
     i = 0
     if len(argv) != 3:
-        lcd.printline(
-            0, "Teddiursa Client")
-        lcd.printline(
-            1, "client.py user" + "#" + "channel")
+        lcd.printline(0, "Teddiursa Client")
+        lcd.printline(1, "client.py user" + "#" + "channel")
         lcd.printline(2, "Initilization Status:")
         lcd.printline(3, "Init Complete!")
         exit(0)
@@ -97,20 +101,12 @@ if __name__ == "__main__":
             else:
                 n = n - 3
                 clr()
-            f1 = open("conf1.txt", "r")
-            f2 = open("conf2.txt", "r")
-            f3 = open("conf3.txt", "r")
-            f4 = open("conf4.txt", "r")
-            f5 = open("conf5.txt", "r")
-            f0 = f1.read()
-            f1 = f2.read()
-            f2 = f3.read()
-            f3 = f4.read()
-            f4 = f5.read()
+            with open(get() + "debug.json", "r") as f:
+                config = load(f)
             if "No Ident response" in res or authNotSent:
                 ins.send("USER", "{} * * :{}".format(usr, usr))
                 ins.send("NICK", usr)
-                if f0 == 0:
+                if config["debugflag1"] == true:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
@@ -121,7 +117,7 @@ if __name__ == "__main__":
                 authNotSent = False
             if "376" in res:
                 ins.join()
-                if f1 == 0:
+                if config["debugflag2"] == true:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
@@ -132,7 +128,7 @@ if __name__ == "__main__":
             if "433" in res:
                 ins.send("USER", "{} * * :{}".format("_" + usr, "_" + usr))
                 ins.send("NICK", "_" + usr)
-                if f2 == 0:
+                if config["debugflag3"] == true:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
@@ -142,7 +138,7 @@ if __name__ == "__main__":
                     print("type 2 --- flag 0 flashed")
             if "PING" in res:
                 ins.send("PONG", ":" + res.split(":")[1])
-                if f3 == 0:
+                if config["debugflag4"] == true:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
@@ -153,18 +149,17 @@ if __name__ == "__main__":
                     print("type 3 --- flag 0 flashed")
             if "366" in res:
                 flg = True
-                if f4 == 0:
+                if config["debugflag5"] == true:
                     ins.send(
                         "PRIVMSG",
                         f"{ch} :"
                         + f"Client Node: {seed} | Teddiursa IRC Client: Got code 366.",
-                )
+                    )
                 else:
                     print("type 4 --- flag 0 flashed")
         a_int = 0
         while cmd != "/quit":
-            cmd = input("< {}> ".format(
-                usr)).strip()
+            cmd = input("< {}> ".format(usr)).strip()
             if a_int <= 2:
                 a_int = a_int + 1
             else:
@@ -173,13 +168,12 @@ if __name__ == "__main__":
             if cmd == "/quit":
                 ins.send("QUIT", "Good bye!")
             if cmd == "//refresh":
-                lcd.printline(0, "")
-                lcd.printline(1, "")
-                lcd.printline(2, "")
-                lcd.printline(3, "")
-            thread.start_new_thread( refresh, ("Thread-1", 2, ) )
+                for x in range(0, 3):
+                    lcd.printline(x, "")
+            # Disabled by 6100m
+            # threading.thread.start_new_thread( refresh, ("Thread-1", 2, ) )
             ins.msgr(cmd)
-            run = Thread(target=log)
+            run = threading.Thread(target=log)
             run.daemon = True
             clr()
             run.start()
