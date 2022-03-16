@@ -1,12 +1,13 @@
+from json import load
 from pathlib import Path
 from sys import argv
+
 import threading
 import liquidcrystal_i2c
 import random
 import socket
 import time
 import threading
-import json
 import pathlib
 
 
