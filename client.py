@@ -19,7 +19,7 @@ def LogToScreen(msg, i):
 def PrintTimeConstantly():
     with open("./keys.json", "rb") as f:
             config = json.load(f)
-    while config["key_main"] == config['key_mirror']:
+    while config["key1_main"] == config['key1_mirror']:
         LogToScreen(0, now.strftime("%H:%M:%S"))
         time.sleep(1)
 
