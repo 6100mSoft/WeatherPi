@@ -20,8 +20,8 @@ def PrintTimeConstantly():
     with open("./keys.json", "rb") as f: config = json.load(f)
     while config["key1_main"] == config['key1_mirror']:
         LogToScreen(0, now.strftime("%H:%M:%S"))
-        time.sleep(96)
-        for i in range(0, 1): lcd.printline(i, "")
+        time.sleep(1)
+        lcd.printline(0, "")
 
 def PrintWeatherConstantly():
     # Based off of 
@@ -34,8 +34,8 @@ def PrintWeatherConstantly():
             f"https://api.openweathermap.org/data/2.5/weather?q={locator_config['CITY']}&appid={api_config['API_KEY']}")
         if response.status_code == 200:
             LogToScreen(1, response.json()['main']['temp'])
-            time.sleep(1)
-            for x in range(0, 1): lcd.printline(i, "")
+            time.sleep(96)
+            lcd.printline(1, "")
 
 def BootupIsComplete():
     lcd.printline(3, "Complete! | WeatherPi OS v0.1")
