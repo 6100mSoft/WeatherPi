@@ -16,6 +16,13 @@ def LogToScreen(msg, i):
         lcd.printline(i, "< {}> {}".format(
             msg[1].split("!")[0], msg[2].strip()))
 
+def PrintTimeConstantly():
+    with open("./keys.json", "rb") as f:
+            config = json.load(f)
+    while config["key_main"] == config['key_mirror']:
+        LogToScreen(0, now.strftime("%H:%M:%S"))
+        time.sleep(1)
+
 if __name__ == "__main__":
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     lcd.printline(0, "WeatherPi Client")
@@ -23,6 +30,9 @@ if __name__ == "__main__":
     lcd.printline(2, "Initilization Status:")
     lcd.printline(3, "Init Complete!")
     ClearScreen()
+    # Double check both of these are cleared just for sanity
+    lcd.printline(0, "")
+    lcd.printline(1, "")
     t1 = threading.Thread(target=PrintWeatherConstantly)
     t2 = threading.Thread(target=PrintTimeConstantly)
     lcd.printline(2, "Bootup Status:")
