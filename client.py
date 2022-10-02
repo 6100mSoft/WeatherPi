@@ -11,7 +11,7 @@ def ClearScreen():
     for x in range(0, 3): LogToScreen(x, "")
  
 def LogToScreen(msg, integer_data):
-      LogToScreen(integer_data, "< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
+      LiquidCrystal_I2C(0x27, 1, numlines=4).printline(integer_data, "< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
 
 def PrintTimeConstantly():
     with open("./keys.json", "rb") as keys_list: config = json.load(keys_list)
