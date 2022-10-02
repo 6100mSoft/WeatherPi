@@ -25,8 +25,8 @@ def PrintTimeConstantly():
         for i in range(0, 1): lcd.printline(i, "")
 
 def PrintWeatherConstantly():
-    # Based off of https://www.tutorialspoint.com/find-current-weather-of-any-city-using-openweathermap-api-in-python
-    BASE_URL = 
+    # Based off of 
+    # https://www.tutorialspoint.com/find-current-weather-of-any-city-using-openweathermap-api-in-python
     with open("./api.json", "rb") as api_conf:
         api_config = json.load(api_conf)
     with open("./location.json", "rb") as loc_conf:
