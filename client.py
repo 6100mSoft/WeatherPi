@@ -21,7 +21,7 @@ def PrintTimeConstantly():
             config = json.load(f)
     while config["key1_main"] == config['key1_mirror']:
         LogToScreen(0, now.strftime("%H:%M:%S"))
-        time.sleep(1)
+        time.sleep(96)
         for i in range(0, 1): lcd.printline(i, "")
 
 def PrintWeatherConstantly():
