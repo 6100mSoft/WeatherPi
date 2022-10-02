@@ -15,8 +15,6 @@ def LogToScreen(msg, i):
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
         lcd.printline(i, "< {}> {}".format(
             msg[1].split("!")[0], msg[2].strip()))
-    else:
-        clr()
 if __name__ == "__main__":
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     lcd.printline(0, "WeatherPi Client")
