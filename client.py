@@ -14,8 +14,7 @@ def ClearScreen():
  
 def LogToScreen(msg, integer_data):
         liquidcrystal_i2c.LiquidCrystal_I2C(
-            0x27, 1, numlines=4).printline(integer_data, "< {}> {}".format(
-                msg[1].split("!")[0], msg[2].strip()))
+            0x27, 1, numlines=4).printline(integer_data, "< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
 
 def PrintTimeConstantly():
     with open("./keys.json", "rb") as keys_list: config = json.load(keys_list)
@@ -57,11 +56,12 @@ if __name__ == "__main__":
             t3 = threading.Thread(target=BootupIsComplete)
             lcd.printline(2, "Bootup Status:")
             lcd.printline(3, "Bootup is beginning")
+            time.sleep(24)
+            ClearScreen()
             t1.Start()
             t2.Start()
             t3.Start()
             t3.Join()
             t2.Join()
             t1.Join()
-       else:
-        sys.exit(1)
+       else: sys.exit(1)
