@@ -10,11 +10,12 @@ def ClearScreen():
     LogToScreen(1, "Refreshing in 10 seconds......")
     for x in range(0, 3):
         lcd.printline(x, "")
-
+ 
 def LogToScreen(msg, i):
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
         lcd.printline(i, "< {}> {}".format(
             msg[1].split("!")[0], msg[2].strip()))
+
 if __name__ == "__main__":
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
     lcd.printline(0, "WeatherPi Client")
@@ -22,12 +23,12 @@ if __name__ == "__main__":
     lcd.printline(2, "Initilization Status:")
     lcd.printline(3, "Init Complete!")
     ClearScreen()
-    t1 = threading.Thread(target=print_square)
-    t2 = threading.Thread(target=print_cube)
+    t1 = threading.Thread(target=PrintWeatherConstantly)
+    t2 = threading.Thread(target=PrintTimeConstantly)
     lcd.printline(2, "Bootup Status:")
     lcd.printline(3, "Bootup is beginning")
     t1.Start()
     t2.Start()
     lcd.printline(3, "")
-    lcd.printline(3, "Complete! | WeatherPi OS v0.1"
+    lcd.printline(3, "Complete! | WeatherPi OS v0.1")
                   
