@@ -23,9 +23,9 @@ def PrintTimeConstantly():
 def PrintWeatherConstantly():
     # Based off of 
     # https://www.tutorialspoint.com/find-current-weather-of-any-city-using-openweathermap-api-in-python
-    with open("./api.json", "rb") as api_conf: api_config = json.load(api_conf)
-    with open("./location.json", "rb") as loc_conf: locator_config = json.load(loc_conf)
-    with open("./keys.json", "rb") as key_conf: key_config = json.load(key_conf)
+    with open("./api.json", "rb") as api_conf: api_config = load(api_conf)
+    with open("./location.json", "rb") as loc_conf: locator_config = load(loc_conf)
+    with open("./keys.json", "rb") as key_conf: key_config = load(key_conf)
     while config["key2_main"] == config['key2_mirror']:
         if requests.get(f"{api_config['API_URL'}?q={locator_config['CITY']}&appid={api_config['API_KEY']}").status_code == 200:
                 LogToScreen(1, response.json()['main']['temp'])
