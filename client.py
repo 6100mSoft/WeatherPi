@@ -1,4 +1,4 @@
-import liquidcrystal_i2c
+from liquidcrystal_i2c import LiquidCrystal_I2C
 import time
 import threading
 import requests
@@ -6,15 +6,12 @@ import json
 import sys
 
 def ClearScreen():
-    lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
-    for x in range(0, 3): lcd.printline(x, "")
-    LogToScreen(0, "clear func trigger pulled")
-    LogToScreen(1, "Refreshing in 10 seconds......")
-    for x in range(0, 3): lcd.printline(x, "")
+    for x in range(0, 3): LiquidCrystal_I2C(0x27, 1, numlines=4).printline(x, "")
+    LogToScreen(1, "Clearing screen......")
+    LiquidCrystal_I2C(0x27, 1, numlines=4).printline(1, "")
  
 def LogToScreen(msg, integer_data):
-        liquidcrystal_i2c.LiquidCrystal_I2C(
-            0x27, 1, numlines=4).printline(integer_data, "< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
+        LiquidCrystal_I2C(0x27, 1, numlines=4).printline(integer_data, "< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
 
 def PrintTimeConstantly():
     with open("./keys.json", "rb") as keys_list: config = json.load(keys_list)
