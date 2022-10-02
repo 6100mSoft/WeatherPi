@@ -3,6 +3,7 @@ import time
 import threading
 import requests
 import json
+import sys
 
 def ClearScreen():
     lcd = liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4)
@@ -48,15 +49,19 @@ if __name__ == "__main__":
         lcd.printline(1, "Type start and press enter to start!")
         lcd.printline(2, "Initilization Status:")
         lcd.printline(3, "Init Complete!")
-        ClearScreen()
-        t1 = threading.Thread(target=PrintWeatherConstantly)
-        t2 = threading.Thread(target=PrintTimeConstantly)
-        t3 = threading.Thread(target=BootupIsComplete)
-        lcd.printline(2, "Bootup Status:")
-        lcd.printline(3, "Bootup is beginning")
-        t1.Start()
-        t2.Start()
-        t3.Start()
-        t3.Join()
-        t2.Join()
-        t1.Join()
+        text = input("Listening....")
+        if text == "enter":
+            ClearScreen()
+            t1 = threading.Thread(target=PrintWeatherConstantly)
+            t2 = threading.Thread(target=PrintTimeConstantly)
+            t3 = threading.Thread(target=BootupIsComplete)
+            lcd.printline(2, "Bootup Status:")
+            lcd.printline(3, "Bootup is beginning")
+            t1.Start()
+            t2.Start()
+            t3.Start()
+            t3.Join()
+            t2.Join()
+            t1.Join()
+       else:
+        sys.exit(1)
