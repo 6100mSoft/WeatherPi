@@ -14,7 +14,7 @@ def LogToScreen(msg, integer_data):
       LiquidCrystal_I2C(0x27, 1, numlines=4).printline(integer_data, "< {}> {}".format(msg[1].split("!")[0], msg[2].strip()))
 
 def PrintTimeConstantly():
-    with open("./keys.json", "rb") as keys_list: config = json.load(keys_list)
+    with open("./keys.json", "rb") as keys_list: config = load(keys_list)
     while config["key1_main"] == config['key1_mirror']:
         LogToScreen(0, now.strftime("%H:%M:%S"))
         sleep(1)
@@ -36,7 +36,7 @@ def BootupIsComplete():
     LogToScreen(3, "Complete! | WeatherPi OS v0.1")
 
 if __name__ == "__main__":
-    with open("./keys.json", "rb") as key_configuration: key_json = json.load(key_configuration)
+    with open("./keys.json", "rb") as key_configuration: key_json = load(key_configuration)
     while key_json['key3_main'] == key_json['key3_mirror']:
         LogToScreen(0, "WeatherPi Client")
         LogToScreen(1, "Type start and press enter to start!")
