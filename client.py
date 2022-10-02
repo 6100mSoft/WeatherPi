@@ -1,9 +1,9 @@
 from liquidcrystal_i2c import LiquidCrystal_I2C
-import time
+from time import sleep
+from json import load
+from sys import exit
 import threading
 import requests
-import json
-import sys
 
 def ClearScreen():
     for x in range(0, 3): LiquidCrystal_I2C(0x27, 1, numlines=4).printline(x, "")
