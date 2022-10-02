@@ -17,7 +17,7 @@ def LogToScreen(msg, i):
                 msg[1].split("!")[0], msg[2].strip()))
 
 def PrintTimeConstantly():
-    with open("./keys.json", "rb") as f: config = json.load(f)
+    with open("./keys.json", "rb") as keys_list: config = json.load(keys_list)
     while config["key1_main"] == config['key1_mirror']:
         LogToScreen(0, now.strftime("%H:%M:%S"))
         time.sleep(1)
@@ -30,9 +30,8 @@ def PrintWeatherConstantly():
     with open("./location.json", "rb") as loc_conf: locator_config = json.load(loc_conf)
     with open("./keys.json", "rb") as key_conf: key_config = json.load(key_conf)
     while config["key2_main"] == config['key2_mirror']:
-        response = requests.get(
-            f"https://api.openweathermap.org/data/2.5/weather?q={locator_config['CITY']}&appid={api_config['API_KEY']}")
-        if response.status_code == 200:
+        api = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={locator_config['CITY']}&appid={api_config['API_KEY']}")
+        if api.status_code == 200:
             LogToScreen(1, response.json()['main']['temp'])
             time.sleep(96)
             lcd.printline(1, "")
