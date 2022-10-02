@@ -11,9 +11,9 @@ def ClearScreen():
     LogToScreen(1, "Refreshing in 10 seconds......")
     for x in range(0, 3): lcd.printline(x, "")
  
-def LogToScreen(msg, i):
+def LogToScreen(msg, integer_data):
         liquidcrystal_i2c.LiquidCrystal_I2C(
-            0x27, 1, numlines=4).printline(i, "< {}> {}".format(
+            0x27, 1, numlines=4).printline(integer_data, "< {}> {}".format(
                 msg[1].split("!")[0], msg[2].strip()))
 
 def PrintTimeConstantly():
@@ -30,14 +30,15 @@ def PrintWeatherConstantly():
     with open("./location.json", "rb") as loc_conf: locator_config = json.load(loc_conf)
     with open("./keys.json", "rb") as key_conf: key_config = json.load(key_conf)
     while config["key2_main"] == config['key2_mirror']:
-        api = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={locator_config['CITY']}&appid={api_config['API_KEY']}")
-        if api.status_code == 200:
-            LogToScreen(1, response.json()['main']['temp'])
-            time.sleep(96)
-            lcd.printline(1, "")
+        if requests.get(
+            f"https://api.openweathermap.org/data/2.5/weather?q={locator_config['CITY']}&appid={api_config['API_KEY']}").status_code == 200:
+                LogToScreen(1, response.json()['main']['temp'])
+                time.sleep(96)
+                lcd.printline(1, "")
 
 def BootupIsComplete():
-    lcd.printline(3, "Complete! | WeatherPi OS v0.1")
+    liquidcrystal_i2c.LiquidCrystal_I2C(0x27, 1, numlines=4).printline(
+        3, "Complete! | WeatherPi OS v0.1")
 
 if __name__ == "__main__":
     with open("./keys.json", "rb") as key_configuration: key_json = json.load(key_configuration)
