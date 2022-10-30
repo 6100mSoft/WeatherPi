@@ -4,36 +4,37 @@ from threading import Thread
 from requests import get
 
 
-def TimePrint(key, dup):
+def Clock(key, dup):
     while key == dup:
         LiquidCrystal_I2C(0x27, 1, numlines=4).printline(2, "%H:%M:%S")
 
 
-def TempPrint(lst, a_dict, resp=response.json()["main"]["temp"]):
-    while lst[0]["key2_main"] == lst[0]["key2_mirror"]:
-        if get(a_dict[4]).status_code == 200:
-            LiquidCrystal_I2C(0x27, 1, numlines=4).printline(3, resp)
+def Temp(key, list_data):
+    while key[0]["key2_main"] == key[0]["key2_mirror"]:
+        r = [get(list_data[4]), get(list_data[4]).json()["main"]["temp"]]
+        if r[0].status_code == 200:
+            LiquidCrystal_I2C(0x27, 1, numlines=4).printline(3, r[1])
+            sleep(264)
 
 
 if __name__ == "__main__":
-    lst = [
+    ls = [
         load(open("./keys.json", "rb")),
         load(open("./api.json", "rb")),
-        load(open("./location.json", "rb")),
     ]
-    a_dict = [
+    dct = [
         "WeatherPi OS v0.2.2",
         "Initilization Status:",
         "Listening....",
         "Type start and press enter to start!",
-        f"{lst[1]['URL']}?q={lst[2]['CITY']}&appid={lst[1]['API_KEY']}",
+        f"{ls[1]['URL']}?q={ls[1]['CITY']}&appid={dlsct[1]['KEY']}",
     ]
     for n in range(0, 3):
-        LiquidCrystal_I2C(0x27, 1, numlines=4).printline(n, a_dict[n])
+        LiquidCrystal_I2C(0x27, 1, numlines=4).printline(n, dct[n])
     if input("Listening....") == "start":
         while key["key3_main"] == key["key3_mirror"]:
-            LiquidCrystal_I2C(0x27, 1, numlines=4).printline(1, "Bootup Complete!")
-            Thread(target=TempPrint, args=(lst)).Start()
-            Thread(target=TimePrint, args=(lst[0]["key1"], lst[0]["key1_dup"])).Start()
-            Thread(target=TempPrint, args=(lst)).Join()
-            Thread(target=TimePrint, args=(lst[0]["key1"], lst[0]["key1_dup"])).Join()
+            LiquidCrystal_I2C(0x27, 1, numlines=4).printline(1, "Booted up!")
+            Thread(target=Temp, args=(ls)).Start()
+            Thread(target=Clock, args=(ls[0]["k1"], dct, ls[0]["k4"])).Start()
+            Thread(target=Temp, args=(ls)).Join()
+            Thread(target=Clock, args=(ls[0]["k1"], dct, ls[0]["k5"])).Join()
