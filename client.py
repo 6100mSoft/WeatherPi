@@ -47,4 +47,3 @@ if __name__ == "__main__":
             Thread(target=TimePrint, args=(key["key1_main"], key["key1_mirror"])).Join()
     else:
         _exit(24)
-
