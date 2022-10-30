@@ -22,9 +22,9 @@ if __name__ == "__main__":
         load(open("./location.json", "rb")),
     ]
     a_dict = [
-        "WeatherPi OS v0.2.1",
+        "WeatherPi OS v0.2.2",
         "Initilization Status:",
-        "Init Complete!",
+        "Listening....",
         "Type start and press enter to start!",
         f"{lst[1]['URL']}?q={lst[2]['CITY']}&appid={lst[1]['API_KEY']}",
     ]
