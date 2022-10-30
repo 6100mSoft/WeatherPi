@@ -1,4 +1,5 @@
 {
     "API_KEY": "",
+    "CITY": "",
     "URL": "https://api.openweathermap.org/data/2.5/weather"
 }
