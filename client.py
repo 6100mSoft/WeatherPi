@@ -31,7 +31,7 @@ if __name__ == "__main__":
         LiquidCrystal_I2C(0x27, 1, numlines=4).printline(num, data)
     if input("Listening....") == "start":
         while key["key3_main"] == key["key3_mirror"]:
-            for num in range(2, 3), data in ["Bootup Complete!", "WeatherPi OS v0.1"]:
+            for num in range(2, 3), data in ["Bootup Complete!", "WeatherPi OS v0.2"]:
                 LiquidCrystal_I2C(0x27, 1, numlines=4).printline(num, data)
             Thread(target=TempPrint, args=(lst)).Start()
             Thread(target=TimePrint, args=(lst[0]["key1"], lst[0]["key1_dup"])).Start()
