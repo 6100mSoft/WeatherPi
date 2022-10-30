@@ -10,7 +10,7 @@ def Clock(key, dup):
 
 
 def Temp(key, list_data):
-    while key[0]["key2_main"] == key[0]["key2_mirror"]:
+    while key[0]["k2"] == key[0]["k5"]:
         resp = [get(list_data[4]), get(list_data[4]).json()["main"]["temp"]]
         if resp[0].status_code == 200:
             LiquidCrystal_I2C(0x27, 1, numlines=4).printline(3, resp[1])
@@ -23,7 +23,7 @@ if __name__ == "__main__":
         load(open("./api.json", "rb")),
     ]
     dct = [
-        "WeatherPi OS v0.2.2.2",
+        "WeatherPi OS v0.2.2.3",
         "Initilization Status:",
         "Listening....",
         "Type start and press enter to start!",
@@ -32,9 +32,9 @@ if __name__ == "__main__":
     for n in range(0, 3):
         LiquidCrystal_I2C(0x27, 1, numlines=4).printline(n, dct[n])
     if input("Listening....") == "start":
-        while key["key3_main"] == key["key3_mirror"]:
+        while key["k3"] == key["k6"]:
             LiquidCrystal_I2C(0x27, 1, numlines=4).printline(1, "Booted up!")
             Thread(target=Temp, args=(ls)).Start()
             Thread(target=Clock, args=(ls[0]["k1"], dct, ls[0]["k4"])).Start()
             Thread(target=Temp, args=(ls)).Join()
-            Thread(target=Clock, args=(ls[0]["k1"], dct, ls[0]["k5"])).Join()
+            Thread(target=Clock, args=(ls[0]["k1"], dct, ls[0]["k4"])).Join()
