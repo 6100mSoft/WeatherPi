@@ -23,11 +23,11 @@ if __name__ == "__main__":
         load(open("./api.json", "rb")),
     ]
     dct = [
-        "WeatherPi OS v0.21.1",
+        "WeatherPi OS v0.2.2.2",
         "Initilization Status:",
         "Listening....",
         "Type start and press enter to start!",
-        f"{ls[1]['URL']}?q={ls[1]['CITY']}&appid={dlsct[1]['KEY']}",
+        f"{ls[1]['URL']}?q={ls[1]['CITY']}&appid={ls[1]['KEY']}",
     ]
     for n in range(0, 3):
         LiquidCrystal_I2C(0x27, 1, numlines=4).printline(n, dct[n])
