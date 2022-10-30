@@ -11,7 +11,7 @@ def TimePrint(key, dup):
 
 def TempPrint(lst, resp=response.json()["main"]["temp"]):
     while lst[0]["key2_main"] == lst[0]["key2_mirror"]:
-        if get(data[2]).status_code == 200:
+        if get(data[3]).status_code == 200:
             LiquidCrystal_I2C(0x27, 1, numlines=4).printline(1, resp)
 
 
