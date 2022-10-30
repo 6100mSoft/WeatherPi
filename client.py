@@ -11,9 +11,9 @@ def Clock(key, dup):
 
 def Temp(key, list_data):
     while key[0]["key2_main"] == key[0]["key2_mirror"]:
-        r = [get(list_data[4]), get(list_data[4]).json()["main"]["temp"]]
-        if r[0].status_code == 200:
-            LiquidCrystal_I2C(0x27, 1, numlines=4).printline(3, r[1])
+        resp = [get(list_data[4]), get(list_data[4]).json()["main"]["temp"]]
+        if resp[0].status_code == 200:
+            LiquidCrystal_I2C(0x27, 1, numlines=4).printline(3, resp[1])
             sleep(264)
 
 
@@ -23,7 +23,7 @@ if __name__ == "__main__":
         load(open("./api.json", "rb")),
     ]
     dct = [
-        "WeatherPi OS v0.2.2",
+        "WeatherPi OS v0.21.1",
         "Initilization Status:",
         "Listening....",
         "Type start and press enter to start!",
