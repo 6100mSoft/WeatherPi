@@ -18,12 +18,11 @@ def TempPrint(data, resp=response.json()["main"]["temp"]):
 
 
 if __name__ == "__main__":
-    listing = [
+    lst = [
         load(open("./keys.json", "rb")),
         [
             load(open("./api.json", "rb")),
             load(open("./location.json", "rb")),
-            load(open("./keys.json", "rb")),
         ],
         f"{data[1][0]['URL']}?q={data[1][1]['CITY']}&appid={data[1][0]['API_KEY']}",
     ]
@@ -41,9 +40,9 @@ if __name__ == "__main__":
             sleep(24)
             for num in range(2, 3), data in ["Bootup Complete!", "WeatherPi OS v0.1"]:
                 LiquidCrystal_I2C(0x27, 1, numlines=4).printline(num, data)
-            Thread(target=TempPrint, args=(listing)).Start()
-            Thread(target=TimePrint, args=(["key1_main"], key["key1_mirror"])).Start()
-            Thread(target=TempPrint, args=(listing)).Join()
-            Thread(target=TimePrint, args=(key["key1_main"], key["key1_mirror"])).Join()
+            Thread(target=TempPrint, args=(lst)).Start()
+            Thread(target=TimePrint, args=(lst[0]["key1"], lst[0]["key1_dup"])).Start()
+            Thread(target=TempPrint, args=(lst)).Join()
+            Thread(target=TimePrint, args=(lst[0]["key1"], lst[0]["key1_dup"])).Join()
     else:
         _exit(24)
